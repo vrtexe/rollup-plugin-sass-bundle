@@ -32,7 +32,7 @@ import { dirname } from 'node:path';
  * @param {SassPluginOptions} options
  * @returns {import('rollup').Plugin}
  */
-export default async function (options = {}) {
+export default async function(options = {}) {
   /** @type {SassPluginState} */
   const state = {
     bundle: {}
@@ -66,7 +66,7 @@ export default async function (options = {}) {
   }
 
   return {
-    name: 'rollup-sass-transform',
+    name: 'sass',
     transform(code, id) {
       if (!filter(id)) {
         return bundleFile(code, id);
