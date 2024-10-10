@@ -1,0 +1,50 @@
+{
+  "name": "rollup-plugin-sass-bundle",
+  "version": "1.0.0",
+  "description": "A simple rollup plugin for transpile sass and bundle and output a single file",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "default": "./index.js"
+    }
+  },
+  "author": {
+    "name": "Vangel",
+    "email": "traykovski5@gmail.com"
+  },
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "@rollup/pluginutils": "^5.1.2"
+  },
+  "devDependencies": {
+    "sass": "^1.79.4"
+  },
+  "peerDependencies": {
+    "sass": ">= 1.45.0"
+  },
+  "peerDependenciesMeta": {
+    "sass": {
+      "optional": true
+    }
+  },
+  "homepage": "https://github.com/vrtexe/rollup-plugin-sass-bundle",
+  "bugs": {
+    "url": "https://github.com/vrtexe/rollup-plugin-sass-bundle/issues",
+    "email": "traykovski5@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vrtexe/rollup-plugin-sass-bundle.git"
+  },
+  "keywords": [
+    "rollup",
+    "sass",
+    "rollup-plugin",
+    "css",
+    "scss"
+  ]
+}
