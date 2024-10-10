@@ -25,7 +25,12 @@ export default {
     format: 'esm',
   },
   plugins: [
-    sass()
+    sass({
+      bundleOptions: {
+        enabled: true,
+        name: 'bundle.css'
+      }
+    })
   ]
 }
 ```
