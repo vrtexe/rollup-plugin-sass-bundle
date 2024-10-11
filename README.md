@@ -1,6 +1,6 @@
 # rollup-plugin-sass-bundle  
 
-[![issues](https://img.shields.io/github/issues/vrtexe/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle) [![npm](https://img.shields.io/npm/v/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass) [![mit](https://img.shields.io/npm/l/rollup-plugin-sass-bundle.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![issues](https://img.shields.io/github/issues/vrtexe/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle) [![npm](https://img.shields.io/npm/v/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle) [![mit](https://img.shields.io/npm/l/rollup-plugin-sass-bundle.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 ## Install
 
