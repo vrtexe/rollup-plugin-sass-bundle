@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-sass-bundle",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A simple rollup plugin for transpile sass and bundle and output a single file",
   "license": "MIT",
   "type": "module",
