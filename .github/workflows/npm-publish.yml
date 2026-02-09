@@ -37,7 +37,6 @@ jobs:
       - run: npm version $APP_VERSION --no-git-tag-version
         env:
           APP_VERSION: ${{ github.event.release.tag_name }}
-      - run: npm ci
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
