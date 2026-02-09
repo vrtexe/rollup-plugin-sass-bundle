@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDeclarationOnly": true,
+    "outDir": ".",
+    "declarationMap": true,
+    "types": ["node"]
+  },
+  "include": ["index.js"],
+  "exclude": ["node_modules"]
+}

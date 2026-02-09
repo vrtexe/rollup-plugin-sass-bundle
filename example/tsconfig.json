@@ -1,0 +1,24 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+
+    "noEmit": false,
+    "paths": {
+      "./*": ["./*"],
+      "src/*": ["./src/*"]
+    },
+    "lib": ["dom", "ES2022"],
+    "types": ["svelte"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "dist/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

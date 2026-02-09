@@ -15,13 +15,19 @@
     "email": "traykovski5@gmail.com"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
+  "scripts": {
+    "generate-types": "npx -p typescript tsc -p ./tsconfig.json"
+  },
   "dependencies": {
     "@rollup/pluginutils": "^5.1.2"
   },
   "devDependencies": {
-    "sass": "^1.79.4"
+    "@types/node": "^25.2.2",
+    "rollup": "^4.57.1",
+    "sass": "^1.97.3"
   },
   "peerDependencies": {
     "sass": ">= 1.45.0"

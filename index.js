@@ -30,12 +30,12 @@ import { dirname } from 'node:path';
 
 /**
  * @param {SassPluginOptions} options
- * @returns {import('rollup').Plugin}
+ * @returns {Promise<import('rollup').Plugin>}
  */
-export default async function(options = {}) {
+export default async function (options = {}) {
   /** @type {SassPluginState} */
   const state = {
-    bundle: {}
+    bundle: {},
   };
 
   /** @type {SassCompiler} */
@@ -46,15 +46,21 @@ export default async function(options = {}) {
   const defaultInclude = ['**/*.scss', '**/*.sass'];
   const defaultBundleInclude = ['**/*.css', ...defaultInclude];
 
-  const filter = createFilter(options.include || defaultInclude, options.exclude);
+  const filter = createFilter(
+    options.include || defaultInclude,
+    options.exclude,
+  );
   const bundleFilter = bundleOptions?.enabled
-    ? createFilter(bundleOptions?.include || defaultBundleInclude, bundleOptions?.exclude)
+    ? createFilter(
+        bundleOptions?.include || defaultBundleInclude,
+        bundleOptions?.exclude,
+      )
     : undefined;
 
   /**
    * @param {string} code
    * @param {string} id
-   * @returns
+   * @returns {import('rollup').TransformResult}
    */
   function bundleFile(code, id) {
     if (!bundleOptions?.enabled || !bundleFilter?.(id)) {
@@ -67,6 +73,7 @@ export default async function(options = {}) {
 
   return {
     name: 'sass',
+    /** @type {import('rollup').TransformHook} */
     transform(code, id) {
       if (!filter(id)) {
         return bundleFile(code, id);
@@ -78,14 +85,14 @@ export default async function(options = {}) {
         loadPaths: [...paths, ...(options.loadPaths || [])],
         style: 'compressed',
         sourceMap: options.sourceMap,
-        ...(options.sassOptions || {})
+        ...(options.sassOptions || {}),
       });
 
       bundleFile(result.css, id);
 
       if (process.env.ROLLUP_WATCH) {
         for (const loadedUrl of result.loadedUrls) {
-          this.addWatchFile(loadedUrl.filePath);
+          this.addWatchFile(loadedUrl.pathname);
         }
       }
 
@@ -93,11 +100,19 @@ export default async function(options = {}) {
         return '';
       }
 
+      /** @type {import('rollup').SourceMapInput|undefined} */
+      const sourceMap = result.sourceMap
+        ? {
+            ...result.sourceMap,
+            version: parseInt(result.sourceMap.version) || 3,
+          }
+        : undefined;
       return {
         code: result.css,
-        map: result.sourceMap
+        map: sourceMap,
       };
     },
+    /** @type {import('rollup').FunctionPluginHooks['generateBundle']} */
     generateBundle(rollupOptions, bundle, isWrite) {
       if (!isWrite || !bundleOptions?.enabled) {
         return;
@@ -108,13 +123,8 @@ export default async function(options = {}) {
         type: 'asset',
         source: source,
         name: bundleOptions.name,
-        fileName: bundleOptions.fileName
+        fileName: bundleOptions.fileName,
       });
-
-      return {
-        type: 'asset',
-        source: source
-      };
-    }
+    },
   };
 }
