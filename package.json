@@ -24,7 +24,7 @@
     "generate-types": "npx -p typescript tsc -p ./tsconfig.json"
   },
   "dependencies": {
-    "@rollup/pluginutils": "^5.1.2"
+    "@rollup/pluginutils": "^5.5.1"
   },
   "devDependencies": {
     "@types/node": "^25.2.2",
