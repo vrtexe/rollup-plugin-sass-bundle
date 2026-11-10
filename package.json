@@ -1,7 +1,7 @@
 {
   "name": "rollup-plugin-sass-bundle",
   "version": "1.2.1",
-  "description": "A simple rollup plugin for transpile sass and bundle and output a single file",
+  "description": "Compile Sass and SCSS in Rollup and emit a single bundled CSS file. Ships TypeScript types.",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
@@ -20,6 +20,9 @@
     "index.js",
     "index.d.ts"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "generate-types": "npx -p typescript tsc -p ./tsconfig.json"
   },
@@ -50,9 +53,19 @@
   },
   "keywords": [
     "rollup",
-    "sass",
     "rollup-plugin",
+    "plugin",
+    "sass",
+    "scss",
     "css",
-    "scss"
+    "stylesheet",
+    "styles",
+    "bundle",
+    "css-bundle",
+    "sass-bundle",
+    "bundler",
+    "asset",
+    "frontend",
+    "typescript"
   ]
 }

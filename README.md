@@ -1,16 +1,28 @@
-# rollup-plugin-sass-bundle  
+# rollup-plugin-sass-bundle
 
-[![issues](https://img.shields.io/github/issues/vrtexe/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle) [![npm](https://img.shields.io/npm/v/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle) [![mit](https://img.shields.io/npm/l/rollup-plugin-sass-bundle.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+Compile Sass and SCSS inside Rollup and emit them as one bundled CSS file, or hand each compiled stylesheet to the rest of your pipeline.
+
+[![npm version](https://img.shields.io/npm/v/rollup-plugin-sass-bundle.svg?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-sass-bundle)
+[![types](https://img.shields.io/npm/types/rollup-plugin-sass-bundle.svg?style=flat-square)](index.d.ts)
+[![license](https://img.shields.io/npm/l/rollup-plugin-sass-bundle.svg?style=flat-square)](LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=flat-square)](package.json)
+[![issues](https://img.shields.io/github/issues/vrtexe/rollup-plugin-sass-bundle.svg?style=flat-square)](https://github.com/vrtexe/rollup-plugin-sass-bundle/issues)
+
+## Why this plugin
+
+- **One CSS asset per build.** Every matched stylesheet is collected during `transform` and written once as a single file in `generateBundle`.
+- **Modern Sass API.** Compilation uses `sass` `compileString`, not the legacy `render` entry points.
+- **Bring your own compiler.** Pass `runtime` to swap in a fork or a wrapper that exposes `compileString`.
+- **Bundling is optional.** With `bundleOptions.enabled` off, the plugin only compiles each stylesheet and Rollup passes the result to your next plugin.
+- **TypeScript included.** `index.d.ts` ships with the package and is exported, so `rollup.config.ts` gets typed options without `@types`. The option types reference the `sass` and `rollup` type definitions.
 
 ## Install
 
 ```sh
-npm install -D rollup-plugin-sass-bundle
+npm install -D rollup-plugin-sass-bundle sass
 ```
 
-## Description
-
-A simple **`rollup`** plugin that only delegates to the **`sass`** runtime used to transpile `sass` files to `css` and bundles it all in a single file, optionally bundling can be turned off, in that case the plugin just transforms the files and rollup passes it on to the other plugins.
+`sass` is a peer dependency and is optional only if you supply your own `runtime`.
 
 ## Usage
 
@@ -35,6 +47,10 @@ export default {
 }
 ```
 
+## Description
+
+A simple **`rollup`** plugin that only delegates to the **`sass`** runtime used to transpile `sass` files to `css` and bundles it all in a single file, optionally bundling can be turned off, in that case the plugin just transforms the files and rollup passes it on to the other plugins.
+
 ## Config
 
 ### `include` and `exclude`
@@ -47,7 +63,7 @@ Default:
 
 A valid [`picomatch`](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns. If `options.include` is omitted or has zero length, filter will return `true` by default. Otherwise, an ID must match one or more of the `picomatch` patterns, and must not match any of the `options.exclude` patterns.
 
-Note that `picomatch` patterns are very similar to [`minimatch`](https://github.com/isaacs/minimatch#readme) patterns, and in most use cases, they are interchangeable. If you have more specific pattern matching needs, you can view [this comparison table](https://github.com/micromatch/picomatch#library-comparisons) to learn more about where the libraries differ.
+Note that `picomatch` patterns are very similar to [`minimatch`](https://github.com/isaacs/minimatch#readme) patterns, and in most use cases, they are interchangeable. If you have more specific pattern matching needs, you can view [this comparison table](https://github.com/micromatch/picomatch#library-comparisons) where the libraries differ.
 
 ### `loadPaths`
 
@@ -61,11 +77,9 @@ By default only the current directory of the file transformed by rollup and the 
 
 Type: [`SassCompiler`](https://sass-lang.com/documentation/js-api/classes/compiler/)
 
-`Default`: Would look for and try to import [`sass`]('https://www.npmjs.com/package/sass')
+`Default`: Would look for and try to import [`sass`](https://www.npmjs.com/package/sass)
 
 Provide a custom runtime to use instead of the default one.
-
-
 
 ### `sourceMap`
 
@@ -96,11 +110,13 @@ Default: `true`
 
 When this option is disabled, the plugin would only compile the `sass` files and you would be expected to bundle them yourself or pass it to a different plugin.
 
+The bundled asset is emitted from `generateBundle` on write builds. Calling `rollup.generate()` without writing produces no CSS file.
+
 #### `name` and `fileName`
 
 Type: `string | undefined`
 
-Default: 
+Default:
   - `name`: `undefined`
   - `filename`: `undefined`
 
@@ -120,8 +136,21 @@ Same as the base plugin options but these options apply only when bunding, by de
 
 A valid [`picomatch`](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns. If `options.include` is omitted or has zero length, filter will return `true` by default. Otherwise, an ID must match one or more of the `picomatch` patterns, and must not match any of the `options.exclude` patterns.
 
-Note that `picomatch` patterns are very similar to [`minimatch`](https://github.com/isaacs/minimatch#readme) patterns, and in most use cases, they are interchangeable. If you have more specific pattern matching needs, you can view [this comparison table](https://github.com/micromatch/picomatch#library-comparisons) to learn more about where the libraries differ.
+Note that `picomatch` patterns are very similar to [`minimatch`](https://github.com/isaacs/minimatch#readme) patterns, and in most use cases, they are interchangeable. If you have more specific pattern matching needs, you can view [this comparison table](https://github.com/micromatch/picomatch#library-comparisons) where the libraries differ.
 
+## Watch mode
+
+When `ROLLUP_WATCH` is set, every file Sass loaded through the import system is added with `addWatchFile`, so edits to partials rebuild the bundle.
+
+## Scope
+
+This plugin compiles Sass and does nothing else. One `transform` hook calls `sass` `compileString`, one `generateBundle` hook emits the collected CSS as a single asset. There is no PostCSS step, no runtime `<style>` injection, no CSS modules, no prefix injection and no legacy Sass API path. Anything the compiler itself supports is available through `sassOptions`.
+
+The two plugins people usually compare against cover a wider surface. `rollup-plugin-sass` adds a PostCSS `processor`, runtime `insert`, CSS modules and a legacy Sass API mode. `rollup-plugin-scss` adds a PostCSS `processor`, a global `prefix`, `failOnError` and `output` callbacks. Pick one of those when you need one of those features; pick this one when you want the compile step alone.
+
+## Contributing
+
+Issues and pull requests go to [vrtexe/rollup-plugin-sass-bundle](https://github.com/vrtexe/rollup-plugin-sass-bundle). The `example/` directory is a working TypeScript and Svelte project built through Rollup. Release history is on the [releases page](https://github.com/vrtexe/rollup-plugin-sass-bundle/releases).
 
 ## License
 
